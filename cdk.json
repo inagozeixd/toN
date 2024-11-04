@@ -1,0 +1,3 @@
+{
+  "app": "npx ts-node bin/cdk-mysql-test.ts"
+}

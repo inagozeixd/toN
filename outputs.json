@@ -1,0 +1,8 @@
+{
+  "EC2Stack": {
+    "MysqlInstanceIds": "i-1234567890abcdef0"
+  },
+  "RunCommandStack": {
+    "ec2-install-mysql-runcommand": "aaaa"
+  }
+}
