@@ -37,11 +37,4 @@ export class VPCStack extends Stack {
     })
     
   }
-
-  // private createStackSuffix(): string {
-  //   const stackId = this.stackId;
-  //   const shortStackId = Fn.select(2, Fn.split('/', stackId));
-  //   const stackSuffix = Fn.select(4, Fn.split('-', shortStackId));
-  //   return stackSuffix;
-  // }
 }

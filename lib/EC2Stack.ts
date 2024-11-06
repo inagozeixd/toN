@@ -42,32 +42,32 @@ export class EC2Stack extends Stack {
 
     const role = Role.fromRoleName(this, 'FromRoleName', 'AmazonSSMManagedInstanceCoreRole')
 
-    const sg = new SecurityGroup(this, 'SecurityGroup', {
-      securityGroupName: 'ec2-sg',
+    const sourceSecurityGroup = new SecurityGroup(this, 'SourceSecurityGroup', {
+      securityGroupName: 'source-sg',
       vpc: vpc
     })
-    sg.addIngressRule(Peer.anyIpv4(), Port.SSH)
 
-    const ec2Props: EC2Props = {
+    const replicaSecurityGroup = new SecurityGroup(this, 'ReplicaSecurityGroup', {
+      securityGroupName: 'replica-sg',
+      vpc: vpc
+    })
+    sourceSecurityGroup.addIngressRule(Peer.securityGroupId(replicaSecurityGroup.securityGroupId), Port.MYSQL_AURORA)
+
+    const sourceProps: EC2Props = {
       vpc: vpc,
       role: role,
       subnetSelection: { subnetType: SubnetType.PUBLIC },
-      securityGroup: sg
+      securityGroup: sourceSecurityGroup
     }
-    const source = new EC2(this, 'Source', ec2Props)
-    const replica1 = new EC2(this, 'Replica1', ec2Props)
-    const replica2 = new EC2(this, 'Replica2', ec2Props)
+    const source = new EC2(this, 'Source', sourceProps)
 
-    new CfnOutput(this, 'MysqlInstanceIds', {
-      value: [source.instanceId, replica1.instanceId, replica2.instanceId].join(','),
-      exportName: 'MysqlInstanceIds'
-    })
+    const replicaProps: EC2Props = {
+      vpc: vpc,
+      role: role,
+      subnetSelection: { subnetType: SubnetType.PUBLIC },
+      securityGroup: replicaSecurityGroup
+    }
+    const replica1 = new EC2(this, 'Replica1', replicaProps)
+    const replica2 = new EC2(this, 'Replica2', replicaProps)
   }
-
-  // private createStackSuffix(): string {
-  //   const stackId = this.stackId;
-  //   const shortStackId = Fn.select(2, Fn.split('/', stackId));
-  //   const stackSuffix = Fn.select(4, Fn.split('-', shortStackId));
-  //   return stackSuffix;
-  // }
 }
