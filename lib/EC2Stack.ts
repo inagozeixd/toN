@@ -1,8 +1,8 @@
 import 'source-map-support'
 import { Construct } from 'constructs'
-import { Stack, StackProps, CfnOutput } from 'aws-cdk-lib'
-import { Instance, InstanceType, InstanceClass, InstanceSize, GenericLinuxImage, Vpc, SubnetSelection, SubnetType, SecurityGroup, IPeer, Port, Peer } from 'aws-cdk-lib/aws-ec2'
-import { Role, IRole } from 'aws-cdk-lib/aws-iam'
+import { Stack, StackProps, CfnOutput, Tags } from 'aws-cdk-lib'
+import { Instance, InstanceType, InstanceClass, InstanceSize, GenericLinuxImage, UserData, Vpc, SubnetSelection, SubnetType, SecurityGroup, IPeer, Port, Peer } from 'aws-cdk-lib/aws-ec2'
+import { Role, IRole, ManagedPolicy, ServicePrincipal } from 'aws-cdk-lib/aws-iam'
 
 interface EC2StackProps extends StackProps {
   vpc: Vpc
@@ -19,6 +19,7 @@ class EC2 extends Construct {
   public readonly instanceId: string
   constructor (scope: Construct, id: string, props: EC2Props) {
     super(scope, id)
+
     const ec2 = new Instance(this, 'Default', {
       instanceName: id.charAt(0).toLowerCase() + id.slice(1),
       associatePublicIpAddress: true,
