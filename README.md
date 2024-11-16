@@ -21,3 +21,6 @@ EC2を使ったmysql検証環境を構築する
 ## mysql server_idの永続性について
 `systemctl restart mysqld` を実施すると、`SET GLOBAL`で設定したserver_idが揮発する<br>
 本課題に対して当プロジェクトでは、`SET PERSIST`コマンドを使うことで回避する
+
+## RunCommandのコード管理
+TemplateMethodパターンを採用
