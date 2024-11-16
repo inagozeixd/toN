@@ -1,3 +1,10 @@
+# 概要
+EC2を使ったmysql検証環境を構築する
+
+# 使い方
+
+##
+
 ## RunCommandの実行順序
 1. SetupMysql
   * 実行対象: source, replica
